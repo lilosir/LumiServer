@@ -1,0 +1,37 @@
+extends layout
+
+block content
+  //- p=data
+  .container
+    .row
+      table.table.table-hover.table-bordered 
+        thead
+          tr
+            th Username
+            th Password
+            th activated
+            th activate_token
+        tbody
+          each user in data
+            tr
+              td=user.username
+              td=user.password
+              td=user.activated
+              td=user.activate_token
+
+//- <!DOCTYPE html>
+//- <html>
+//- <head>
+//- <title>Registered Users</title>
+//- <link rel="stylesheet" type="text/css" href="../stylesheets/css/bootstrap.min.css">
+//- </head>
+//- <body>
+//- <h4>test</h4>
+//- <button class="btn btn-primary">click</button>
+//- <p id='data'></p>
+//- </body>
+
+//- <script src="/javascripts/application.js" type="text/javascript" charset="utf-8" async defer>
+//- <p><%=data</p>
+//- </script>
+//- </html>
