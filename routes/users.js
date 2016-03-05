@@ -7,6 +7,8 @@ var data;
 /* GET users listing. */
 router.post('/', loginUsers.registers);
 
+router.post('/login', loginUsers.login);
+
 router.get('/', loginUsers.renderUsers);
 
 router.get('/:id/verification', loginUsers.verifyUser);

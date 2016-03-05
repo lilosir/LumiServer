@@ -1,3 +1,6 @@
+require("babel-polyfill");
+require("babel-register");
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -44,6 +47,7 @@ if (app.get('env') === 'development') {
       message: err.message,
       error: err.status || 500
     });
+    console.trace(err);
   });
 }
 
@@ -61,7 +65,7 @@ app.use(function(err, req, res, next) {
 mongoose.connect('mongodb://localhost/lumi');
 var db = mongoose.connection;
 db.on('error',function (err){
-  consolo.log(err);
+  console.log(err);
 })
 
 db.on('disconnected', function (){
