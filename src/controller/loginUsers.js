@@ -4,7 +4,12 @@ var Sessions = require("../models/sessions");
 var ifExists = require("../utilities/ifExists");
 var GUID = require("../utilities/GUID");
 
-module.exports = {
+var Ctrl = require('../Controller');
+
+module.exports = Ctrl.createController({
+
+  //the array below contains the registed functions which are need to add extra functions before executing
+  findSession: ['getOneUser'],
 
   registers: function (req, res, next) {
     console.log(req.body);
@@ -48,54 +53,31 @@ module.exports = {
       if(data.password != user.password)
         return next({message: "invalid password!", status: 401});
 
-      session = await ifExists.session(data.username);
+      session = await Sessions.findOne({user:user._id}).exec();
+
       //if the session does not exist, so create one session
       if (!session) {
-        var {username, _id} = user;
-        session = await Sessions.create({user: {username, _id}, session_token: GUID()});
+        // var {username, user_id} = user;
+
+        var username = user.username;
+        var user_id = user._id;
+        
+        session = await Sessions.create({user: user_id, session_token: GUID()});
       }
-
+      console.log("before update session",session);
       var new_expire = new Date(new Date().getTime()+ 2 * 7 * 24 * 60 * 60 * 1000);
-      // session = await Sessions.updateSession(data.username, GUID(), new_expire);
 
-      await session.update({ expire_At: new_expire }).exec();
+      await session.update({ expire_At: new_expire,session_token: GUID() }).exec();
+      console.log("updated session1:",session);
+     
+      session = await Sessions.findOne({user:user._id}).populate("user", "username avatar").exec();
 
+      console.log("updated session2:",session);
       return res.send(session);
 
     } catch(e) {
       return next({message: e.message});
-      // 
-      // try{
-      //   session = new Sessions({username: user.username, session_token: GUID()});
-      //   session.save(function(err){
-      //     if(err){
-      //       return next({message: err.message});
-      //     }
-      //   })
-      //   console.log("create a new session:",session);
-      //   return res.send(session);
-      // } catch(e) {
-      //   return next({message: e.message});
-      // }
     }
-
-    //if the session exists, so update/extend the expire time
-    // try{
-    //   var new_expire = new Date(new Date().getTime()+ 2 * 7 * 24 * 60 * 60 * 1000);
-    //   session = await Sessions.updateSession(data.username, GUID(), new_expire);
-     
-    // } catch(e){
-    //   return next({message: e.message});
-    // }
-
-    // try{
-    //   session = await Sessions.findByUsername(data.username);
-    //   console.log("updated session:",session);
-    //   return res.send(session);
-    // }catch(e){
-    //   return next({message: e.message});
-    // }
-
   },
 
   renderUsers: function (req, res, next) {
@@ -104,7 +86,6 @@ module.exports = {
         next(new Error("error! render failed"));
       }
       res.render('users', { data: docs });
-      res.send({})
     });
   },
 
@@ -126,15 +107,25 @@ module.exports = {
     });
   },
 
-  getOneUser: async function (req, res, next){
-    var id = req.params.id;
-    try{
-      var user = await Users.findByUserId(id);
-      res.send(user);
-      console.log(user);
-    }catch(e){
-      return next({message: "please login", status: 401});
+  getOneUser: async function ({params, current_user, body, query}, res, next){
+  
+    // console.log("getOneUser", req.current_user);
+    if (params.id == current_user._id){
+      try{
+        var user = await Users.findById({_id: current_user._id}).populate("friends",'username avatar');  
+        var friends = user.friends;
+        // console.log("legal user's friends",friends);
+        // console.log("here")
+        res.send(friends);
+        // return next({message: "shsi", status: 500});
+      }catch(e){
+        console.log(e)
+      }
+      
     }
-    
+    else{
+      res.send(current_user);
+      console.log("illegal user");
+    }     
   },
-}
+});

@@ -12,14 +12,14 @@ var ifExists = {
     }
   },
 
-  session: async function(username){
-    try {
-      var result = await Sessions.findOne({'user.username': username}).exec();
-      return result;
-    } catch(e) {
-      return false;
-    }
-  },
+  // session: async function(username){
+  //   try {
+  //     var result = await Sessions.findOne({'user.username': username}).exec();
+  //     return result;
+  //   } catch(e) {
+  //     return false;
+  //   }
+  // },
 }
 
 module.exports = ifExists;

@@ -8,12 +8,24 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+require("./schemas/baseSchema");
+var fs = require('fs');
+
+
+// expose all models to global env
+fs.readdirSync(path.join(__dirname, '/models')).forEach(function(model) {
+  global[model.substring(0, model.length - 3) + 'Model'] = require(path.join(__dirname, '/models/', model));
+});
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var sessions = require('./routes/sessions');
+var messages = require('./routes/messages');
 
 var app = express();
+
+//globle before actions -- find session verification
+require('./beforeActions/findSession');
 
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));
@@ -30,6 +42,13 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/sessions', sessions);
+app.use('/messages', messages);
+
+// var pathView = path.join(__dirname, '../views');
+// console.log(pathView);
+// app.get('/chat',function (req,res){
+//   res.sendFile(pathView+'/chat.html');
+// })
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -75,4 +94,9 @@ db.on('disconnected', function (){
 })
 
 
-module.exports = app;
+
+// module.exports = app;
+module.exports = {
+  app: app,
+  io: require('./socketio'),
+}

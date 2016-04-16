@@ -3,12 +3,17 @@ var sendMail = require('../utilities/mailer');
 var ejs = require('ejs');
 var fs  = require('fs');
 
-var usersSchema = new mongoose.Schema({
+mongoose.plugin(require('./baseSchema'));
+
+var Schema = mongoose.Schema;
+
+var usersSchema = new Schema({
   username: String,
   password: String,
   activated: Boolean,
   activate_token: String,
-  friends: [{username: String}],  
+  friends: [{type: Schema.Types.ObjectId, ref:"Users",}],  
+  avatar: {type: String, default:"images/default_avatar.png"},
 });
 
 usersSchema.statics = {
