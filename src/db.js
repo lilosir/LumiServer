@@ -41,9 +41,9 @@ var Messages = require('./models/messages');
 // })
 
 //show sessions
-// Sessions.findAll(function (err,session){
-//   console.log(session);
-// });
+Sessions.findAll(function (err,session){
+  console.log(session);
+});
 
 
 // Users.find({username: "rsheng@lakeheadu.ca"}, function (err,user){
@@ -159,8 +159,8 @@ var creatUsers = co.wrap(function* (){
 
 // Users.findOne({_id: "56f2f400b6e073d43245d6fb"}).populate('friends', 'username password').exec().then((user)=> console.log(user.friends));
 
-Sessions.findOne({_id: '570fc953cbdc94b8264424e7'},function(err,docs){
-  err && console.log(err);
-  console.log(docs)
-}).populate("user", "username avatar");
+// Sessions.findOne({_id: '570fc953cbdc94b8264424e7'},function(err,docs){
+//   err && console.log(err);
+//   console.log(docs)
+// }).populate("user", "username avatar");
 
