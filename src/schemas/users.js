@@ -42,6 +42,10 @@ usersSchema.statics = {
         }).exec(cb);
   },
 
+  findBySimilarUsername: function (username, cb){
+    return this.find({ username: new RegExp(username, 'i')}).exec(cb);
+  }
+
 }
 
 usersSchema.methods.sendVerification = function () {

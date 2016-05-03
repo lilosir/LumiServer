@@ -41,9 +41,13 @@ var Messages = require('./models/messages');
 // })
 
 //show sessions
-Sessions.findAll(function (err,session){
-  console.log(session);
-});
+// Sessions.findAll(function (err,session){
+//   console.log(session);
+// });
+
+// Users.findAll(function (err,user){
+//   console.log(user);
+// });
 
 
 // Users.find({username: "rsheng@lakeheadu.ca"}, function (err,user){
@@ -61,27 +65,11 @@ function promisefyUpdate(Model, arg1, arg2, options) {
 };
 
 var arrayUser = [
-'570fc8290fdec5502fe3e4c0',
-// '570fc847d9449b842c7d6319',
-'570fc847d9449b842c7d631a',
-'570fc847d9449b842c7d631b',
-'570fc847d9449b842c7d631c',
-'570fc847d9449b842c7d631d',
-'570fc847d9449b842c7d631e',
-'570fc847d9449b842c7d631f',
-'570fc847d9449b842c7d6320',
-'570fc847d9449b842c7d6321',
-'570fc847d9449b842c7d6322',
-'570fc847d9449b842c7d6323',
-'570fc847d9449b842c7d6324',
-'570fc847d9449b842c7d6325',
-'570fc847d9449b842c7d6326',
-'570fc847d9449b842c7d6327',
-'570fc847d9449b842c7d6328',
-'570fc847d9449b842c7d6329',
-'570fc847d9449b842c7d632a',
-'570fc847d9449b842c7d632b',
-'570fc847d9449b842c7d632c' 
+'572281817d75053030dff679',
+'572794119432dab42f451190',
+'572794305b7c515807c3452d',
+'572794407b9e0cd4185948d3',
+'5727944838d4ff801774bdc5', 
 ];
 
 var run = co.wrap(function* (){
@@ -97,7 +85,7 @@ var run = co.wrap(function* (){
 
 })
 
-// run();
+run();
 
 
 //create a user
@@ -108,6 +96,7 @@ var run = co.wrap(function* (){
 //   }
 //   console.log(user);
 // });
+
 
 var array = [];
 for (var i = 1; i < 21; i++) {
@@ -121,7 +110,7 @@ var creatUsers = co.wrap(function* (){
       console.log(user);
     };
   }catch(e){
-    console.log(e)
+    console.log(e);
   }
     
 })

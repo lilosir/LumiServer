@@ -4,7 +4,7 @@ var fetch = require('node-fetch');
 var headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        "SESSION-TOKEN": "82de3053-99ab-d6c5-50ec-887e30671bcf",
+        "SESSION-TOKEN": "d4d02868-04c7-6617-97a5-2a7c1daef2d4",
   }
 
 var body = JSON.stringify({username: 'rsheng@lakeheadu.ca', password:'123456'});
@@ -12,7 +12,8 @@ var body = JSON.stringify({username: 'rsheng@lakeheadu.ca', password:'123456'});
 fetch('http://localhost:3100/messages?from=rsheng&to=rsheng1',{method: 'GET', headers: headers,})
   .then(function(res) {
     return res.json();
-  }).then(function(json) {
+  })
+  .then(function(json) {
     console.log(json);
 
     var earlierMessages = json.map(function(item){

@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var checkSession = require('../controller/checkSession')
+var Sessions = require('../controller/Sessions')
 
 /* GET users listing. */
-router.post('/', checkSession.getSession);
+router.post('/', Sessions.getSession);
 
 module.exports = router;

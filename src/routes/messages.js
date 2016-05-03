@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var getEarlierMessages = require('../controller/getEarlierMessages')
+var Messages = require('../controller/Messages')
 
 /* GET users listing. */
-router.get('/', getEarlierMessages.getEarlierMessages);
+router.get('/', Messages.getEarlierMessages);
 
 module.exports = router;

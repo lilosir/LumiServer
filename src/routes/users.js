@@ -1,18 +1,24 @@
 var express = require('express');
 var Users = require('../models/users');
 var router = express.Router();
-var loginUsers = require('../controller/loginUsers')
+var Users = require('../controller/Users')
 
 var data;
+
+// get "/" => get user list
+// get "/:id"  => get user by id
+// get "/" => ?query=fwefwe
 /* GET users listing. */
-router.post('/', loginUsers.registers);
+router.post('/', Users.registers);
 
-router.post('/login', loginUsers.login);
+router.post('/login', Users.login);
 
-router.get('/', loginUsers.renderUsers);
+router.get('/', Users.renderUsers);
 
-router.get('/:id/verification', loginUsers.verifyUser);
+router.get('/:id/verification', Users.activateUser);
 
-router.get('/:id', loginUsers.getOneUser);
+router.get('/userfriends/:id', Users.getUserFriends);
+
+router.get('/searchFriends', Users.searchFriends);
 
 module.exports = router;
