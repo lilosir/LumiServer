@@ -1,6 +1,8 @@
 require("babel-polyfill");
 require("babel-register");
 
+require('./gcm');
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -92,8 +94,6 @@ db.on('error',function (err){
 db.on('disconnected', function (){
   console.log('Datebase disconnected!!');
 })
-
-
 
 // module.exports = app;
 module.exports = {

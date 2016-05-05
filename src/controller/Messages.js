@@ -3,6 +3,22 @@ var Users = require('../models/users');
 
 module.exports = {
 
+  register: function(req, res, next){
+
+  },
+
+
+  sendMessage: function(req, res, next) {
+    // var {
+    //   to,
+    //   from,
+    //   text
+    // } = req.body;
+
+    // var token = getTokenByID(to);
+    // sendGCM(token, req.body);
+  },
+
   // getEarlierMessages: async function({query:{from = "none", to = "none"}}, res, next){
   getEarlierMessages: async function (req, res, next){
 

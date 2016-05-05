@@ -65,7 +65,8 @@ function promisefyUpdate(Model, arg1, arg2, options) {
 };
 
 var arrayUser = [
-'572281817d75053030dff679',
+'572281817d75053030dff678',
+// '572281817d75053030dff679',
 '572794119432dab42f451190',
 '572794305b7c515807c3452d',
 '572794407b9e0cd4185948d3',
@@ -74,7 +75,7 @@ var arrayUser = [
 
 var run = co.wrap(function* (){
   try {
-    var ii = yield promisefyUpdate(Users, {username:'rsheng1@lakeheadu.ca'},
+    var ii = yield promisefyUpdate(Users, {username:'rsheng2@lakeheadu.ca'},
                  {$push:{friends:  { $each: arrayUser }}},
                  {});
 
@@ -85,7 +86,7 @@ var run = co.wrap(function* (){
 
 })
 
-run();
+// run();
 
 
 //create a user

@@ -8,13 +8,13 @@ function initIO(server) {
     console.log('a user connected',socket.id);
     // user disconnected
     socket.on('disconnect', function() {
-      console.log('user disconnected',socket.id);
+      // console.log('user disconnected',socket.id);
     });
 
     //store the users
     socket.on('init', function(username){
       if(username in users){
-
+        console.log('init already',username);
       }else{
         users[username] = socket.id;
         console.log('init',username);
@@ -25,8 +25,10 @@ function initIO(server) {
       console.log("from:",from);
       console.log("to:",to);
       console.log("content:",text);
-      io.to(users[to]).emit('chat message',text);
+      // io.to(users[to]).emit('chat message',text);
     });
+
+    socket.emit('one',{hello: 'world'});
   });
 };
 
