@@ -3,14 +3,13 @@ var Sessions = require("../models/sessions");
 var Users = require('../models/users');
 
 /**
-check if the current user is himself, which means validate the user's identity
+to get current user if is a valid user, then in the 'next' function to check if it is leagl
 **/
 Ctrl.addCustomAction('findSession',async function(req, res, next) {
 
   try{
 
     var session_token = req.headers["session-token"];
-    // console.log("session_token",session_token);
     var session;
     if(session_token){
       session = await Sessions.findOne({session_token:session_token}).populate('user').exec();   

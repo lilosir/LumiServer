@@ -12,7 +12,8 @@ var usersSchema = new Schema({
   password: String,
   activated: Boolean,
   activate_token: String,
-  friends: [{type: Schema.Types.ObjectId, ref:"Users",}],  
+  friends: [{type: Schema.Types.ObjectId, ref:"Users",}], 
+  recent: [{type: Schema.Types.ObjectId, ref:"Users"}],  
   avatar: {type: String, default:"images/default_avatar.png"},
 });
 
@@ -66,7 +67,7 @@ usersSchema.methods.sendVerification = function () {
   });
 };
 
-usersSchema.methods.addFriend = function(username2){
-    this.friends.push({username:username2});
-}
+// usersSchema.methods.findById = function(id){
+//     return this.findById(id).exec();
+// }
 module.exports = usersSchema;

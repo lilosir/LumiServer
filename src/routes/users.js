@@ -21,4 +21,8 @@ router.get('/userfriends/:id', Users.getUserFriends);
 
 router.get('/searchFriends', Users.searchFriends);
 
+router.post('/updateRecent/:id', Users.updateRecent);
+
+router.get('/getRecent/:id', Users.getRecent);
+
 module.exports = router;

@@ -4,7 +4,12 @@ var Users = require('../models/users');
 module.exports = {
 
   register: function(req, res, next){
+    var {
+      username,
+      token,
+    } = req.body;
 
+    console.log('token',token);
   },
 
 

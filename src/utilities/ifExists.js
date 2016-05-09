@@ -12,6 +12,17 @@ var ifExists = {
     }
   },
 
+  findRecent: async function(id){
+    try{
+      var recent = await Users.findById(id).populate('recent', '_id');
+      console.log('recent if:',recent)
+      return recent;
+    }catch(e){
+      console.log(e)
+      return false;
+    }
+  },
+
   // session: async function(username){
   //   try {
   //     var result = await Sessions.findOne({'user.username': username}).exec();

@@ -9,7 +9,7 @@ var Ctrl = require('../Controller');
 module.exports = Ctrl.createController({
 
   //the array below contains the registed functions which are need to add extra functions before executing
-  findSession: ['getUserFriends'],
+  findSession: ['getUserFriends', 'updateRecent', 'getRecent'],
 
   registers: function (req, res, next) {
     console.log(req.body);
@@ -109,10 +109,10 @@ module.exports = Ctrl.createController({
 
   getUserFriends: async function ({params, current_user, body, query}, res, next){
   
-    // console.log("getOneUser", req.current_user);
+    // console.log("getUserFriends", req.current_user);
     // console.log('params',params);
     // console.log('current_user',current_user);    
-
+    
     if (params.id == current_user._id){
       try{
         var user = await Users.findById({_id: current_user._id}).populate("friends",'username avatar');  
@@ -122,7 +122,6 @@ module.exports = Ctrl.createController({
       }catch(e){
         console.log(e)
       }
-      
     }
     else{
       res.send(current_user);
@@ -139,8 +138,85 @@ module.exports = Ctrl.createController({
     }catch(e){
       console.log(e);
     }
-    
+  },
 
+  updateRecent: async function({params, current_user, body, query}, res, next){
+
+    if (params.id == current_user._id){
+     
+      //insert the friend id into recent
+      try{
+        var user = await Users.findById(params.id)
+          .populate({
+            path: 'recent',
+            match: {_id: body.friendID}
+          })
+          .exec();
+        
+        if(user.recent.length !== 0){
+          // res.send({message: 'already in recent list'});
+          // console.log("it already in the list")
+          user = await Users.findByIdAndUpdate(params.id,
+            {$pull:{recent: body.friendID}}).exec();
+        }
+
+        user = await Users.findByIdAndUpdate(params.id,
+          {$push:{'recent':  {_id: body.friendID},$position: 0}}).exec();
+
+
+        if(!user){
+          return next({message: "cannot find this user", status: 401})
+        }
+
+        var user_updated = await Users.findById(params.id)
+          .populate('recent', 'username _id avatar')
+          .exec();
+
+        // console.log('user_updated', user_updated);
+
+        if(!user_updated){
+          return res.send({});
+        }
+
+        console.log(user_updated.recent);
+
+        return res.send(user_updated.recent);
+      }catch(e){
+        console.log(e);
+        return next({message: e.message});
+      }     
+    }
+    else{
+      res.send(current_user);
+      console.log("illegal user");
+    }
+  },
+
+  getRecent: async function({params, current_user, body, query}, res, next){
+    if (params.id == current_user._id){
+
+      try{
+        var user = await Users.findById(params.id)
+          .populate('recent', 'username _id avatar')
+          .exec();
+
+        console.log('user recent',user.recent);
+        if(user.recent.length < 1){
+
+          return res.send({message: 'no recent'})
+        }
+
+        return res.send(user.recent);
+      }catch(e){
+        console.log(e);
+        return next({message: e.message});
+      }
+
+    }else{
+
+      console.log("illegal user");
+      res.send(current_user);
+    }
   },
 
 });

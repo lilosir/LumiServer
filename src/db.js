@@ -50,10 +50,33 @@ var Messages = require('./models/messages');
 // });
 
 
-// Users.find({username: "rsheng@lakeheadu.ca"}, function (err,user){
-//   console.log(user[0].friends);
-// }).populate("friends");
+// Users.findById('572281817d75053030dff678').populate('recent', "username")
+//   .exec(function(err, docs){
+//     console.log(docs.recent)
+//   })
 
+// Users.findByIdAndUpdate('572281817d75053030dff678',
+//   {$pull: {recent: '572794305b7c515807c3452d'}}).exec();
+
+// Users.findById('572281817d75053030dff678')
+//   .populate({
+//     path: 'recent',
+//     match: {_id: '5727944838d4ff801774bdc5'}
+//   })
+//   .exec(function(err, docs){
+//     console.log(docs);
+//   })
+
+
+// push a recent friend
+// Users.findByIdAndUpdate('572281817d75053030dff678', 
+//         {$push:{'recent': {_id: '5727944838d4ff801774bdc5'}}}).exec();
+
+Users.update({username: 'rsheng1@lakeheadu.ca'}, 
+  {$set: {recent: []}}, 
+  function(err, res){
+    console.log(res)
+  })
 
 function promisefyUpdate(Model, arg1, arg2, options) {
   return new Promise(function(res, rej) {
@@ -115,8 +138,6 @@ var creatUsers = co.wrap(function* (){
   }
     
 })
-
-// creatUsers();
 
 
 
