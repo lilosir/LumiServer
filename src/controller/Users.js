@@ -16,7 +16,7 @@ module.exports = Ctrl.createController({
     var data = req.body;
 
     ifExists.user(data.username).then(function(user) {    
-      console.log(user);   
+      // console.log(user);   
       res.status(403).send({error: 'this user already exits!'});
     })
     .catch(function() {
@@ -35,7 +35,7 @@ module.exports = Ctrl.createController({
   },
 
   login: async function (req, res, next){
-    console.log("login requst body:",req.body);
+    // console.log("login requst body:",req.body);
     var data = req.body;
     var user, session;
     try{
@@ -64,15 +64,15 @@ module.exports = Ctrl.createController({
         
         session = await Sessions.create({user: user_id, session_token: GUID()});
       }
-      console.log("before update session",session);
+      // console.log("before update session",session);
       var new_expire = new Date(new Date().getTime()+ 2 * 7 * 24 * 60 * 60 * 1000);
 
       await session.update({ expire_At: new_expire,session_token: GUID() }).exec();
-      console.log("updated session1:",session);
+      // console.log("updated session1:",session);
      
       session = await Sessions.findOne({user:user._id}).populate("user", "username avatar").exec();
 
-      console.log("updated session2:",session);
+      // console.log("send session:",session);
       return res.send(session);
 
     } catch(e) {
@@ -130,7 +130,7 @@ module.exports = Ctrl.createController({
   },
 
   searchFriends: async function(req, res, next){
-    console.log("login query name:",req.query.name);
+    // console.log("login query name:",req.query.name);
     
     try{
       var name = await Users.findBySimilarUsername(req.query.name);
@@ -178,7 +178,7 @@ module.exports = Ctrl.createController({
           return res.send({});
         }
 
-        console.log(user_updated.recent);
+        // console.log(user_updated.recent);
 
         return res.send(user_updated.recent);
       }catch(e){
@@ -200,7 +200,7 @@ module.exports = Ctrl.createController({
           .populate('recent', 'username _id avatar')
           .exec();
 
-        console.log('user recent',user.recent);
+        // console.log('user recent',user.recent);
         if(user.recent.length < 1){
 
           return res.send({message: 'no recent'})
