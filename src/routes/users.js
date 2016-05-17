@@ -11,6 +11,8 @@ var data;
 /* GET users listing. */
 router.post('/', Users.registers);
 
+router.get('/myself/:id', Users.getMyself);
+
 router.post('/login', Users.login);
 
 router.get('/', Users.renderUsers);

@@ -41,9 +41,9 @@ var Messages = require('./models/messages');
 // })
 
 //show sessions
-// Sessions.findAll(function (err,session){
-//   console.log(session);
-// });
+Sessions.findAll(function (err,session){
+  console.log(session);
+});
 
 // Users.findAll(function (err,user){
 //   console.log(user);
@@ -72,11 +72,11 @@ var Messages = require('./models/messages');
 // Users.findByIdAndUpdate('572281817d75053030dff678', 
 //         {$push:{'recent': {_id: '5727944838d4ff801774bdc5'}}}).exec();
 
-Users.update({username: 'rsheng1@lakeheadu.ca'}, 
-  {$set: {recent: []}}, 
-  function(err, res){
-    console.log(res)
-  })
+// Users.update({username: 'rsheng1@lakeheadu.ca'}, 
+//   {$set: {recent: []}}, 
+//   function(err, res){
+//     console.log(res)
+//   })
 
 function promisefyUpdate(Model, arg1, arg2, options) {
   return new Promise(function(res, rej) {
@@ -122,22 +122,22 @@ var run = co.wrap(function* (){
 // });
 
 
-var array = [];
-for (var i = 1; i < 21; i++) {
-  array.push({username: 'rsheng'+i+'@lakeheadu.ca', password: '123456', activated: true, activate_token: ''})
-};
+// var array = [];
+// for (var i = 1; i < 21; i++) {
+//   array.push({username: 'rsheng'+i+'@lakeheadu.ca', password: '123456', activated: true, activate_token: ''})
+// };
 
-var creatUsers = co.wrap(function* (){
-  try{
-    for (var i = 0; i < array.length; i++) {
-      var user = yield Users.create(array[i]);
-      console.log(user);
-    };
-  }catch(e){
-    console.log(e);
-  }
+// var creatUsers = co.wrap(function* (){
+//   try{
+//     for (var i = 0; i < array.length; i++) {
+//       var user = yield Users.create(array[i]);
+//       console.log(user);
+//     };
+//   }catch(e){
+//     console.log(e);
+//   }
     
-})
+// })
 
 
 

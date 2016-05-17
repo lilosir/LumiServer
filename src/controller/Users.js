@@ -9,7 +9,7 @@ var Ctrl = require('../Controller');
 module.exports = Ctrl.createController({
 
   //the array below contains the registed functions which are need to add extra functions before executing
-  findSession: ['getUserFriends', 'updateRecent', 'getRecent'],
+  findSession: ['getMyself', 'getUserFriends', 'updateRecent', 'getRecent'],
 
   registers: function (req, res, next) {
     console.log(req.body);
@@ -32,6 +32,29 @@ module.exports = Ctrl.createController({
         res.send({message:'check your mailbox to activate'});
       });
     })
+  },
+
+  getMyself: async function({params, current_user, body, query}, res, next){
+    if (params.id == current_user._id){
+
+      try{
+        var user = await Users.findById(params.id).exec();
+
+        console.log('user',user);
+        if(user){
+          return res.send(user);
+        }else{
+          return next({message: "please create a new account", status: 401});
+        }
+      }catch(e){
+        return next({message: e.message});
+      }
+
+    }else{
+
+      console.log("illegal user");
+      res.send(current_user);
+    }
   },
 
   login: async function (req, res, next){
@@ -111,7 +134,7 @@ module.exports = Ctrl.createController({
   
     // console.log("getUserFriends", req.current_user);
     // console.log('params',params);
-    // console.log('current_user',current_user);    
+    console.log('current_user',current_user);    
     
     if (params.id == current_user._id){
       try{
@@ -200,12 +223,8 @@ module.exports = Ctrl.createController({
           .populate('recent', 'username _id avatar')
           .exec();
 
-        // console.log('user recent',user.recent);
-        if(user.recent.length < 1){
-
-          return res.send({message: 'no recent'})
-        }
-
+        console.log('user recent',user.recent);
+        
         return res.send(user.recent);
       }catch(e){
         console.log(e);
