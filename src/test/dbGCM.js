@@ -13,15 +13,17 @@ db.on('disconnected', function (){
 })
 
 var Users = require('../models/users');
+var mongoose = require('mongoose');
 var Sessions = require('../models/sessions');
 var Messages = require('../models/messages');
 
-var Gcms = require('../models/gcms');
+var Gcms = require('../models/googleCloudMessaging');
+
 
 // clear
 // Gcms.remove({},function(err, docs){
 //   if(err){
-//     console.log(e);
+//     console.log(err);
 //   }else{
 //     console.log(docs);
 //   }
@@ -29,16 +31,24 @@ var Gcms = require('../models/gcms');
 
 Gcms.find({}, function(err, docs){
   if(err){
-    console.log(e);
+    console.log(err);
   }else{
     console.log(docs);
   }
 });
 
+// Gcms.findOne({user: '572281817d75053030dff679'},function(err, docs){
+//   if(err){
+//     console.log(err);
+//   }else{
+//     console.log(docs);
+//   }
+// });
+
 //findone
 // Gcms.findOne({token:"abc123", users: "5727944838d4ff801774bdc5"},function(err, docs){
 //   if(err){
-//     console.log(e);
+//     console.log(err);
 //   }else{
 //     console.log(docs);
 //   }
@@ -46,7 +56,7 @@ Gcms.find({}, function(err, docs){
 
 // Gcms.findOne({token:"abc123"},function(err, docs){
 //   if(err){
-//     console.log(e);
+//     console.log(err);
 //   }else{
 //     console.log(docs);
 //   }
@@ -56,7 +66,7 @@ Gcms.find({}, function(err, docs){
 // Gcms.findOneAndUpdate({token:"abc123"}, 
 //         {$push:{'users': {_id: '572794407b9e0cd4185948d3'}}},function(err, docs){
 //   if(err){
-//     console.log(e);
+//     console.log(err);
 //   }else{
 //     console.log(docs);
 //   }

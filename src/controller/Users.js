@@ -40,7 +40,7 @@ module.exports = Ctrl.createController({
       try{
         var user = await Users.findById(params.id).exec();
 
-        console.log('user',user);
+        // console.log('user',user);
         if(user){
           return res.send(user);
         }else{
@@ -134,7 +134,7 @@ module.exports = Ctrl.createController({
   
     // console.log("getUserFriends", req.current_user);
     // console.log('params',params);
-    console.log('current_user',current_user);    
+    // console.log('current_user',current_user);    
     
     if (params.id == current_user._id){
       try{
@@ -223,7 +223,7 @@ module.exports = Ctrl.createController({
           .populate('recent', 'username _id avatar')
           .exec();
 
-        console.log('user recent',user.recent);
+        // console.log('user recent',user.recent);
         
         return res.send(user.recent);
       }catch(e){
@@ -236,6 +236,24 @@ module.exports = Ctrl.createController({
       console.log("illegal user");
       res.send(current_user);
     }
+  },
+
+  queryOne: async function(req, res, next){
+    // console.log("query id: ", req.query.id);
+    var id = req.query.id;
+    try{
+      var user = await Users.findById(id).exec();
+
+      if(user){
+        res.send({username: user.username, avatar: user.avatar});
+      }else{
+        return next({message: "cannot find that user"});
+      }
+    }catch(e){
+      console.log(e);
+      return next({message: e.message});
+    }
+
   },
 
 });

@@ -1,7 +1,7 @@
 require("babel-polyfill");
 require("babel-register");
 
-require('./gcm');
+// require('./gcm');
 
 var express = require('express');
 var path = require('path');
@@ -23,7 +23,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var sessions = require('./routes/sessions');
 var messages = require('./routes/messages');
-var gcm = require('./routes/gcm');
+
 
 var app = express();
 
@@ -46,7 +46,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/sessions', sessions);
 app.use('/messages', messages);
-app.use('/gcm', gcm);
+
 
 // var pathView = path.join(__dirname, '../views');
 // console.log(pathView);

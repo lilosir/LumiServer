@@ -1,12 +1,11 @@
-'use strict';
-
 var mongoose = require('mongoose');
 mongoose.plugin(require('./baseSchema'));
 var Schema = mongoose.Schema;
 
 var GoogleCloudMessaging = new Schema({
-  token: String,
-  users: [{ type: Schema.Types.ObjectId, ref: "Users" }]
+  
+  user: {type: Schema.Types.ObjectId, ref:"Users"},
+  tokens: [String],
 });
 
 module.exports = GoogleCloudMessaging;

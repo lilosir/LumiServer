@@ -1,6 +1,6 @@
 var Users = require('../models/users');
 var Sessions = require('../models/sessions');
-var Gcms = require('../models/gcms');
+var Gcms = require('../models/googleCloudMessaging');
 
 var ifExists = {
 
@@ -25,10 +25,10 @@ var ifExists = {
     }
   },
 
-  gcm: async function(token, userid){
+  gcmToken: async function(userid, token){
     try{
-      var gcm = await Gcms.find({token: token,'users': userid});
-      if(gcm.length > 0){
+      var gcm = await Gcms.findOne({'user': userid,tokens: token}).exec();
+      if(gcm){
         return gcm;
       }else{
         return false;
@@ -40,10 +40,10 @@ var ifExists = {
     }
   },
 
-  gcmToken: async function(token){
+  gcmUser: async function(userid){
     try{
-      var gcm = await Gcms.find({token: token});
-      if(gcm.length > 0){
+      var gcm = await Gcms.findOne({user: userid}).exec();
+      if(gcm){
         return gcm;
       }else{
         return false;

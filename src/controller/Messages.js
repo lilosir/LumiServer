@@ -1,27 +1,99 @@
 var Messages = require('../models/messages');
 var Users = require('../models/users');
+var gcm = require('node-gcm');
+var Ctrl = require('../Controller');
+var ifExists = require("../utilities/ifExists");
+var Gcms = require('../models/googleCloudMessaging');
 
-module.exports = {
+module.exports = Ctrl.createController({
 
-  register: function(req, res, next){
+  findSession: ['sendMessages'],
+
+  register: async function(req, res, next){
+    // console.log("----------------",req.body);
     var {
-      username,
-      token,
-    } = req.body;
+        token,
+        userid,
+      } = req.body;
 
-    console.log('token',token);
+      try{
+        var gcmUser = await ifExists.gcmUser(userid);
+
+        if(!gcmUser){
+          //no token and no users, create a new one
+          var gcm = await Gcms.create({user: userid, tokens: [token]});
+          res.send({message: 'registed gcm'})
+        }else{
+          //this user exist, but not registed this token
+          var gcmToken = await ifExists.gcmToken(userid, token);
+
+          if(!gcmToken){
+            gcmToken = await Gcms.findOneAndUpdate({user: userid}, 
+              {$push:{'tokens': token}});
+            res.send({message: 'push this token into your list'})
+          }else{
+            res.send({message: 'you are already in this token user list'});
+          }
+        }
+
+      }catch(e){
+        return next({message: e.message});
+      }
+    
   },
 
 
-  sendMessage: function(req, res, next) {
-    // var {
-    //   to,
-    //   from,
-    //   text
-    // } = req.body;
+  sendMessages: async function({params, current_user, body, query}, res, next){
 
-    // var token = getTokenByID(to);
-    // sendGCM(token, req.body);
+    var {
+      to,
+      text,
+    } = body;   
+
+    if (params.id == current_user._id){
+      
+      try{
+        var user = await Gcms.findOne({user: to});
+        if(user){
+           var regTokens = user.tokens;
+        }
+      }catch(e){
+        console.log("failed to find destination user");
+        return next({message: "failed to find destination user"});
+      }
+      
+      // var content = JSON.stringify(body);   
+      var message = new gcm.Message({
+          collapseKey: 'demo',
+          priority: 'high',
+          contentAvailable: true,
+          // delayWhileIdle: true,
+          timeToLive: 3,
+          // dryRun: true,
+          data: {
+              key1: text,
+              key2: to,
+          },
+      });
+
+      // var regTokens = ['doR1_AtU_6Q:APA91bH5YL4-1NF-Kn4XaMwtnZK4U5zKqDrQDkrxP2zU5FLsehsSdh57c1_yWgD0fZPBEPjyN8dT6kOqBiEjhyaJg1sTMZJvAsdz4H_fXpeOmyYjo8VGd7f7ukcuLlsnAxbEwEOuw-ln'];
+
+      // Set up the sender with you API key
+      var sender = new gcm.Sender('AIzaSyD5f7HQE8I6IJNGaJAbPjL8qBYUThz83dA');
+
+      // Now the sender can be used to send messages
+      sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+          if(err){
+            console.error(err);
+          }else{
+            console.log("gcm registrationTokens response:",response);
+            res.send({message: "send to gcm successfully"})
+          }   
+      });
+    }else{
+      console.log("illegal user");
+      res.send(current_user);
+    }
   },
 
   // getEarlierMessages: async function({query:{from = "none", to = "none"}}, res, next){
@@ -64,4 +136,4 @@ module.exports = {
     }   
 
   }
-}
+});

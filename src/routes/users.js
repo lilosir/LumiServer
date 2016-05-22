@@ -27,4 +27,6 @@ router.post('/updateRecent/:id', Users.updateRecent);
 
 router.get('/getRecent/:id', Users.getRecent);
 
+router.get('/getOne', Users.queryOne);
+
 module.exports = router;
