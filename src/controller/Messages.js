@@ -7,7 +7,7 @@ var Gcms = require('../models/googleCloudMessaging');
 
 module.exports = Ctrl.createController({
 
-  findSession: ['sendMessages'],
+  findSession: ['sendMessages', 'storeMessages'],
 
   register: async function(req, res, next){
     // console.log("----------------",req.body);
@@ -56,10 +56,12 @@ module.exports = Ctrl.createController({
         var user = await Gcms.findOne({user: to});
         if(user){
            var regTokens = user.tokens;
+        }else{
+          console.log("failed to find destination user");
+          return next({message: "failed to find destination user"});
         }
       }catch(e){
-        console.log("failed to find destination user");
-        return next({message: "failed to find destination user"});
+        return next(e);
       }
       
       // var content = JSON.stringify(body);   
@@ -90,6 +92,28 @@ module.exports = Ctrl.createController({
             res.send({message: "send to gcm successfully"})
           }   
       });
+    }else{
+      console.log("illegal user");
+      res.send(current_user);
+    }
+  },
+
+  storeMessages: async function({params, current_user, body, query}, res, next){
+
+    var {
+      to,
+      text,
+    } = body;   
+
+    if (params.id == current_user._id){
+      try{
+        console.log("dsfsdfsdfd",body);
+        var message = await Messages.create({from: params.id, to: to, contents: text});
+        res.send(message);
+      }catch(e){
+        console.log("store message failed", e)
+        return next({message: "failed to store this message"});
+      }
     }else{
       console.log("illegal user");
       res.send(current_user);

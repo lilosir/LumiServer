@@ -9,4 +9,6 @@ router.post('/register', Messages.register);
 
 router.post('/sendMessages/:id', Messages.sendMessages);
 
+router.post('/storeMessages/:id', Messages.storeMessages);
+
 module.exports = router;

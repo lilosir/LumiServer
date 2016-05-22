@@ -14,7 +14,6 @@ Ctrl.addCustomAction('findSession',async function(req, res, next) {
     if(session_token){
       session = await Sessions.findOne({session_token:session_token}).populate('user').exec();   
     }
-
     if (!session) throw {message: "cannot find session", status: 401};
 
     req.session = session;

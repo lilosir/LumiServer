@@ -13,16 +13,4 @@ b = a;
 // 	console.log(a)
 // }
 
-var t = [
-{a: 123, b:321},
-{a: 222, b:333},
-];
-var jt = JSON.stringify(t);
-
-var t1 = [
-{'a': 123, 'b':321},
-{'a': 222, 'b':333},
-]
-
-var jt1 = JSON.parse(t1);
-console.log(jt1)
+console.log(typeof Math.round(Math.random() * 10000));

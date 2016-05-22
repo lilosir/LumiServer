@@ -20,10 +20,6 @@ var Messages = require('./models/messages');
 //   console.log(docs);
 // })
 
-// clear the database
-// Sessions.removeAll(function(err, docs) {
-//   console.log(docs);
-// })
 
 // Sessions.updateSession('rsheng@lakeheadu.ca',new Date(),new Date(new Date().getTime()+ 2 * 7 * 24 * 60 * 60 * 1000), function (err,session){
 //   if(err){
@@ -40,10 +36,6 @@ var Messages = require('./models/messages');
 //   console.log(docs);
 // })
 
-//show sessions
-Sessions.findAll(function (err,session){
-  console.log(session);
-});
 
 // Users.findAll(function (err,user){
 //   console.log(user);

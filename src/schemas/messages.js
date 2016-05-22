@@ -8,7 +8,14 @@ var Messages = new Schema({
   // message: [{withwhom: String, content: String, fromMe: boolean, date: {type:Date, default: new Date()},}] 
   from: {type: Schema.Types.ObjectId, ref:"Users"},
   to: {type: Schema.Types.ObjectId, ref:"Users"},
-  message: String,
+  contents: [{
+  	text: String,
+  	name: String,
+  	image: {uri: String},
+  	date: Date,
+  	position: String,
+  	uniqueId: Number, 
+  }],
 });
 
 module.exports = Messages;

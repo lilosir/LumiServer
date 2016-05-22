@@ -19,10 +19,9 @@ fetch("http://localhost:3100/gcm/register", contents)
 		return res.json();
 	})
 	.then(function (json){
-    // json = json.reverse()
 		console.log('json',json);
 	})
 	.catch(function(err){
     	console.log('err',err);
-  	})	
+  })	
 
