@@ -10,12 +10,12 @@ var headers = {
 var bd = {
 	to: '572281817d75053030dff679',
 	text: {
-		text: 'React Native enables you to build world-class application experiences on native platforms using a consistent developer experience based on JavaScript and React. https://github.com/facebook/react-native',
+		text: 'hi',
 	    name: 'rsheng1',
 	    image: {uri: 'https://facebook.github.io/react/img/logo_og.png'},
 	    position: 'right',
-	    date: new Date(2016, 0, 1, 20, 0),
-	    uniqueId: Math.round(Math.random() * 10000),
+	    date: new Date(2016, 0, 13, 20, 0),
+	    uniqueId: Math.round(Math.random() * 1000000),
 	}
 };
 

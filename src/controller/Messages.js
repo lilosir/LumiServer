@@ -7,7 +7,7 @@ var Gcms = require('../models/googleCloudMessaging');
 
 module.exports = Ctrl.createController({
 
-  findSession: ['sendMessages', 'storeMessages'],
+  findSession: ['sendMessages', 'storeMessages', 'getEarlierMessages'],
 
   register: async function(req, res, next){
     // console.log("----------------",req.body);
@@ -121,43 +121,78 @@ module.exports = Ctrl.createController({
   },
 
   // getEarlierMessages: async function({query:{from = "none", to = "none"}}, res, next){
-  getEarlierMessages: async function (req, res, next){
+  getEarlierMessages: async function({params, current_user, body, query}, res, next){
+    console.log(query);
+    
+    var from = query.from;
+    var to = query.to;
+    var deadline = query.deadline;
 
-    var users = {};
-    users['from'] = req.query.from;
-    users['to'] = req.query.to;
-    console.log("from and to:",users['from'],users['to']);
-    try{
+    console.log('params.id', from);
+    console.log('current_user._id', current_user._id);
+
+    if (from == current_user._id){
+      try{
+        //return X pieces of messages sort by content date.
+        var messages = await Messages.find({
+          from: from, 
+          to: to,
+          "contents.date": {$lt: deadline}}).sort({'contents.date': -1}).limit(5);
+
+        console.log("earlier 5 messages: ", messages);
+
+        if(!messages){
+          return res.send([]);
+          // return next({message: "there is no earlier messages"});
+        }
+
+        return res.send(messages);
+      }catch(e){
+        console.log("get earlier messages failed", e)
+        return next({message: "failed to get earlier messages"});
+      }
+    }else{
+      console.log("illegal user!");
+      res.send(current_user);
+    }
+
+
+
+    // var users = {};
+    // users['from'] = query.from;
+    // users['to'] = query.to;
+    // console.log("from and to:",users['from'],users['to']);
+    // try{
       
-      var user_from = await Users.findByUsername(users['from']+"@lakeheadu.ca");
-      if(!user_from){
-        user_from = "none";
-      }
-      user_from = user_from._id;
+    //   var user_from = await Users.findByUsername(users['from']+"@lakeheadu.ca");
+    //   if(!user_from){
+    //     user_from = "none";
+    //   }
+    //   user_from = user_from._id;
 
-      var user_to = await Users.findByUsername(users['to']+"@lakeheadu.ca");
-      if(!user_to){
-        user_to = "none";
-      }
-      user_to = user_to._id;
+    //   var user_to = await Users.findByUsername(users['to']+"@lakeheadu.ca");
+    //   if(!user_to){
+    //     user_to = "none";
+    //   }
+    //   user_to = user_to._id;
 
-      console.log(user_from+" "+user_to);
+    //   console.log(user_from+" "+user_to);
 
-      var messages = await Messages.find({$or: [{from :user_from, to: user_to},{from :user_to, to: user_from}]})
-        .sort('created_at')
-        .populate("from","username avatar")
-        .populate("to","username avatar")
-        .exec();
+    //   var messages = await Messages.find({$or: [{from :user_from, to: user_to},{from :user_to, to: user_from}]})
+    //     .sort('created_at')
+    //     .populate("from","username avatar")
+    //     .populate("to","username avatar")
+    //     .exec();
 
-      if(!messages){
-        return next({message: "there is no earlier messages"});
-      }
-      console.log(messages);
-      return res.send(messages);
+    //   if(!messages){
+    //     return next({message: "there is no earlier messages"});
+    //   }
+    //   console.log(messages);
+    //   return res.send(messages);
 
-    }catch(e){
-      return next({message: e.message});
-    }   
+    // }catch(e){
+    //   return next({message: e.message});
+    // }   
 
   }
 });

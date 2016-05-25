@@ -11,4 +11,6 @@ router.post('/sendMessages/:id', Messages.sendMessages);
 
 router.post('/storeMessages/:id', Messages.storeMessages);
 
+router.get('/getEarlierMessages', Messages.getEarlierMessages);
+
 module.exports = router;
