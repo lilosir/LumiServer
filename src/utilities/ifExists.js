@@ -8,7 +8,12 @@ var ifExists = {
     
     try {
       var user = await Users.findByUsername(username);
-      return user;
+      console.log("this user", user)
+      if(user){
+        return user;
+      }else{
+        return false;
+      }      
     }catch(e){
       return false;
     }

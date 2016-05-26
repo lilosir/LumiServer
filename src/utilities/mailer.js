@@ -6,9 +6,10 @@ var smtpConfig = {
   secure: true, // use SSL
   auth: {
     user: 'sryoliver@gmail.com',
-    pass: 'SRYoliver0603',
+    pass: 'SRYoliver19900603',
   }
 };
+
 var transporter = nodemailer.createTransport(smtpConfig);
 
 var sendMail = function (to, subject, body, cb) {

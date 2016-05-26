@@ -7,6 +7,8 @@ block content
       table.table.table-hover.table-bordered 
         thead
           tr
+            th Nickname
+            th Status
             th Username
             th Password
             th activated
@@ -14,6 +16,8 @@ block content
         tbody
           each user in data
             tr
+              td=user.nickname
+              td=user.status
               td=user.username
               td=user.password
               td=user.activated

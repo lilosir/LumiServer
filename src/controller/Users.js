@@ -11,27 +11,32 @@ module.exports = Ctrl.createController({
   //the array below contains the registed functions which are need to add extra functions before executing
   findSession: ['getMyself', 'getUserFriends', 'updateRecent', 'getRecent'],
 
-  registers: function (req, res, next) {
+  registers: async function (req, res, next) {
     console.log(req.body);
     var data = req.body;
 
-    ifExists.user(data.username).then(function(user) {    
-      // console.log(user);   
-      res.status(403).send({error: 'this user already exits!'});
-    })
-    .catch(function() {
-      // register user
+    try{
+      var user = await ifExists.user(data.username);
+
+      if(user){
+        return res.send({message: "this account already exists", status: 401});
+      }
+
       var activate_token = new Date().getTime();
-      var user = new Users({username: data.username, password: data.password, activated: false, activate_token: activate_token});
+      var nickname = data.username.split("@lakeheadu.ca")[0];
+
+      user = await Users.create({nickname:nickname, username: data.username, password: data.password, activated: false, activate_token: activate_token});
       
-      user.save(function (err, s) {
-        if (err) {
-          next(new Error("error! save failed"));
-        }
+      if(user){
         user.sendVerification();        
-        res.send({message:'check your mailbox to activate'});
-      });
-    })
+        return res.send({message:'check your mailbox to activate'});
+      }else{
+        return res.send({message:'create account failed, try agian', status: 500});
+      }
+    }catch(e){
+      return next({message: e.message});
+    }
+    
   },
 
   getMyself: async function({params, current_user, body, query}, res, next){
@@ -65,7 +70,7 @@ module.exports = Ctrl.createController({
       user = await ifExists.user(data.username);
 
       if (!user)
-        return next({message: "please create a new account", status: 401});
+        return next({message: "This account does exist", status: 401});
 
       if(user.activated === false)
         return next({message: "please activate your account", status: 401});

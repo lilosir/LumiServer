@@ -8,6 +8,8 @@ mongoose.plugin(require('./baseSchema'));
 var Schema = mongoose.Schema;
 
 var usersSchema = new Schema({
+  nickname: String,
+  status: String,
   username: String,
   password: String,
   activated: Boolean,
@@ -43,8 +45,8 @@ usersSchema.statics = {
         }).exec(cb);
   },
 
-  findBySimilarUsername: function (username, cb){
-    return this.find({ username: new RegExp(username, 'i')}).exec(cb);
+  findBySimilarUsername: function (nickname, cb){
+    return this.find({ nickname: new RegExp(nickname, 'i')}).exec(cb);
   }
 
 }
@@ -53,7 +55,7 @@ usersSchema.methods.sendVerification = function () {
 
   var subject = 'lumi email verification';
 
-  var str = fs.readFileSync('./emailtemplates/verification.ejs', 'utf8');
+  var str = fs.readFileSync('./src/emailtemplates/verification.ejs', 'utf8');
   var template = ejs.compile(str, {});
   var verificationLink = "http://localhost:3100/users/" + this._id + "/verification?activate_token="+ this.activate_token;
   
@@ -61,7 +63,7 @@ usersSchema.methods.sendVerification = function () {
 
   sendMail(this.username, subject, body, function(err){
     if(err){
-      console.error(err);
+      console.log("err",err);
     }else
       console.log("send verification email successfully!");
   });
