@@ -10,11 +10,15 @@ var Schema = mongoose.Schema;
 var usersSchema = new Schema({
   nickname: String,
   status: String,
+  gender: { type: String, default: 'Male' },
+  birthday: { type: Date, default: Date.now },
   username: String,
   password: String,
   activated: Boolean,
   activate_token: String,
   friends: [{type: Schema.Types.ObjectId, ref:"Users",}], 
+  blockfriends:[{type: Schema.Types.ObjectId, ref:"Users",}], 
+  blockposts:[{type: Schema.Types.ObjectId, ref:"Users",}], 
   recent: [{type: Schema.Types.ObjectId, ref:"Users"}],  
   avatar: {type: String, default:"images/default_avatar.png"},
 });

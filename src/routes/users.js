@@ -29,4 +29,6 @@ router.get('/getRecent/:id', Users.getRecent);
 
 router.get('/getOne', Users.queryOne);
 
+router.get('/isFriend', Users.isFriend);
+
 module.exports = router;

@@ -18,9 +18,9 @@ var Users = require('../models/users');
 //   console.log(docs);
 // })
 
-// Users.find({},function (err,user){
-//   console.log(user);
-// });
+Users.find({},function (err,user){
+  console.log(user);
+});
 
 /**----------------------------------------------------------------------------
 push friends
@@ -61,9 +61,22 @@ var run = co.wrap(function* (){
 
 //----------------------------------------------------------------------
 
-// push a recent friend
-// Users.findByIdAndUpdate('572281817d75053030dff678', 
-//         {$push:{'recent': {_id: '5727944838d4ff801774bdc5'}}}).exec();
+// push a friend
+// Users.findByIdAndUpdate('574761f43ce12658159781b3', 
+//         {$push:{'friends': {_id: '574761f43ce12658159781b4'}}},function(err, docs){
+//         	if(err){
+//         		console.log(err);
+//         	}
+//         	console.log(docs)
+//         });
+
+// Users.findOne({_id: '574761f43ce12658159781b3', friends: '574761f43ce12658159781b2' },
+// 	function(err, docs){
+//         	if(err){
+//         		console.log(err);
+//         	}
+//         	console.log(docs)
+//         });
 
 // Users.update({username: 'rsheng1@lakeheadu.ca'}, 
 //   {$set: {recent: []}}, 
@@ -93,14 +106,14 @@ for (var i = 1; i < 21; i++) {
 };
 
 
-var createusers = co(function* (){
-  try{
-    for (var i = 0; i < array.length; i++) {
-      var user = yield Users.create(array[i]);
-      console.log(user);
-    };
-  }catch(e){
-    console.log(e);
-  }
+// co(function* (){
+//   try{
+//     for (var i = 0; i < array.length; i++) {
+//       var user = yield Users.create(array[i]);
+//       console.log(user);
+//     };
+//   }catch(e){
+//     console.log(e);
+//   }
     
-})
+// })

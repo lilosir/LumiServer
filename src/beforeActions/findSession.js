@@ -22,6 +22,6 @@ Ctrl.addCustomAction('findSession',async function(req, res, next) {
       throw {message: "cannot find session user", status: 401};
 
   } catch(e){
-      return next(e);
+      return next("find session err",e);
   }
 });

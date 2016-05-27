@@ -9,7 +9,7 @@ var Ctrl = require('../Controller');
 module.exports = Ctrl.createController({
 
   //the array below contains the registed functions which are need to add extra functions before executing
-  findSession: ['getMyself', 'getUserFriends', 'updateRecent', 'getRecent'],
+  findSession: ['getMyself', 'getUserFriends', 'updateRecent', 'getRecent', 'isFriend'],
 
   registers: async function (req, res, next) {
     console.log(req.body);
@@ -143,8 +143,9 @@ module.exports = Ctrl.createController({
     
     if (params.id == current_user._id){
       try{
-        var user = await Users.findById({_id: current_user._id}).populate("friends",'username avatar');  
+        var user = await Users.findById({_id: current_user._id}).populate("friends",'nickname status username avatar');  
         var friends = user.friends;
+        console.log('friends', friends);
         res.send(friends);
         // return next({message: "shsi", status: 500});
       }catch(e){
@@ -225,7 +226,7 @@ module.exports = Ctrl.createController({
 
       try{
         var user = await Users.findById(params.id)
-          .populate('recent', 'username _id avatar')
+          .populate('recent', 'nickname status username _id avatar')
           .exec();
 
         // console.log('user recent',user.recent);
@@ -250,7 +251,15 @@ module.exports = Ctrl.createController({
       var user = await Users.findById(id).exec();
 
       if(user){
-        res.send({username: user.username, avatar: user.avatar});
+        res.send({
+          nickname: user.nickname, 
+          username: user.username,
+          avatar: user.avatar,
+          status: user.status,
+          gender: user.gender,
+          birthday: user.birthday,
+          friends: user.friends, 
+          });
       }else{
         return next({message: "cannot find that user"});
       }
@@ -259,6 +268,36 @@ module.exports = Ctrl.createController({
       return next({message: e.message});
     }
 
+  },
+
+  isFriend: async function({params, current_user, body, query}, res, next){
+
+    if (query.current_id == current_user._id){
+
+      var friend_id = query.friend_id;
+      var current_id = query.current_id;
+
+      try{
+        var user = await Users.findOne({_id: current_id, friends: friend_id }).exec();
+        if(user){
+          return res.send({
+                    nickname: user.nickname, 
+                    username: user.username,
+                    avatar: user.avatar,
+                    status: user.status,
+                    gender: user.gender,
+                    birthday: user.birthday,
+                    friends: user.friends, });
+        }else{
+          return res.send({message: false});
+        }
+      }catch(e){
+        return next({message: e.message});
+      }
+    }else{
+      console.log("illegal user");
+      res.send(current_user);
+    }
   },
 
 });
