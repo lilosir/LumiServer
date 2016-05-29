@@ -75,6 +75,8 @@ module.exports = Ctrl.createController({
           data: {
               key1: text,
               key2: to,
+              key3: 'chat',
+              key4: 'unread'
           },
       });
 
@@ -99,16 +101,24 @@ module.exports = Ctrl.createController({
   },
 
   storeMessages: async function({params, current_user, body, query}, res, next){
-
     var {
       to,
       text,
     } = body;   
 
+    console.log("store messagaes body",body)
+
     if (params.id == current_user._id){
       try{
-        console.log("dsfsdfsdfd",body);
+        //sometimes maybe saved twice, so delete one
+        // var message = await Messages.findOne({from: params.id, to: to, 'contents.text': text.text, 'contents.uniqueId':text.uniqueId}).exec();
+        // console.log(message == null);
+        // if(message){
+        //   console.log("1111111111111111111111111111111111111111111111duplicated")
+        // }else{
+        //   console.log("2222222222222222222222222222222222222222222222single")
         var message = await Messages.create({from: params.id, to: to, contents: text});
+        // }
         res.send(message);
       }catch(e){
         console.log("store message failed", e)
@@ -137,7 +147,7 @@ module.exports = Ctrl.createController({
         var messages = await Messages.find({
           from: from, 
           to: to,
-          "contents.date": {$lt: deadline}}).sort({'contents.date': -1}).limit(5);
+          "contents.date": {$lt: deadline}}).sort({'contents.date': -1}).limit(20);
 
         console.log("earlier 5 messages: ", messages);
 

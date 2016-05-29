@@ -62,8 +62,8 @@ var run = co.wrap(function* (){
 //----------------------------------------------------------------------
 
 // push a friend
-// Users.findByIdAndUpdate('574761f43ce12658159781b3', 
-//         {$push:{'friends': {_id: '574761f43ce12658159781b4'}}},function(err, docs){
+// Users.findByIdAndUpdate('574761f43ce12658159781b4', 
+//         {$push:{'friends': {_id: '574761f43ce12658159781b3'}}},function(err, docs){
 //         	if(err){
 //         		console.log(err);
 //         	}
