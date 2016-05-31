@@ -1,15 +1,19 @@
 var Users = require('../models/users');
 var mailder = require('nodemailer');
 var Sessions = require("../models/sessions");
+var Notifications = require("../models/notifications");
 var ifExists = require("../utilities/ifExists");
 var GUID = require("../utilities/GUID");
 
 var Ctrl = require('../Controller');
+var gcm = require('node-gcm');
+var Gcms = require('../models/googleCloudMessaging');
 
 module.exports = Ctrl.createController({
 
   //the array below contains the registed functions which are need to add extra functions before executing
-  findSession: ['getMyself', 'getUserFriends', 'updateRecent', 'getRecent', 'isFriend'],
+  findSession: ['getMyself', 'getUserFriends', 'updateRecent', 'getRecent', 'isFriend',
+                'addFriendRequest', ],
 
   registers: async function (req, res, next) {
     console.log(req.body);
@@ -299,5 +303,86 @@ module.exports = Ctrl.createController({
       res.send(current_user);
     }
   },
+
+  addFriendRequest: async function({params, current_user, body, query}, res, next){
+    
+     var {
+      from,
+      to,
+    } = body;   
+
+    if (params.id == current_user._id){
+      var notification;
+      try{
+        var user = await Gcms.findOne({user: to});
+        if(user){
+           var regTokens = user.tokens;
+
+           notification = await ifExists.notification(to);
+            if(notification){
+              notification = await Notifications.findOne({
+                user:to,
+                'contents.from': params.id,
+                'contents.classificaiton': 'addFriendRequest',
+                'contents.text': from + " wants to add you as friend"
+              }).exec();
+
+              if(notification){
+                console.log("already sent request")
+                return res.send({message: "already sent request"});
+              }
+            }else{
+              notification = await Notifications.create({user: to});
+            }
+        }else{
+          console.log("failed to find destination user");
+          return next({message: "failed to find destination user"});
+        }
+      }catch(e){
+        return next({message: e.message});
+      }
+      
+      // var content = JSON.stringify(body);   
+      var message = new gcm.Message({
+          collapseKey: 'demo',
+          priority: 'high',
+          contentAvailable: true,
+          data: {
+              key1: params.id,
+              key2: to,
+              key3: 'addFriendRequest',
+              key4: 'unread',
+          },
+      });
+
+      // Set up the sender with you API key
+      var sender = new gcm.Sender('AIzaSyD5f7HQE8I6IJNGaJAbPjL8qBYUThz83dA');
+
+      // Now the sender can be used to send messages
+      sender.send(message, { registrationTokens: regTokens }, function (err, response) {
+          if(err){
+            console.error(err);
+          }else{
+            console.log("gcm send to friend request:",response);
+            Notifications.findOneAndUpdate({user: to},
+               {$push:{'contents': {
+                from: params.id,
+                classificaiton: 'addFriendRequest',
+                text: from + " wants to add you as friend",
+                ifread: false,
+                }}}, function(err, docs){
+                  if(err){
+                    return next({message: err.message});
+                  }else{
+                    return res.send({message: 'send request successfully'})
+                  }
+               })
+          }   
+      });
+    }else{
+      console.log("illegal user");
+      res.send(current_user);
+    }
+  }
 
 });

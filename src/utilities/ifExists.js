@@ -1,6 +1,7 @@
 var Users = require('../models/users');
 var Sessions = require('../models/sessions');
 var Gcms = require('../models/googleCloudMessaging');
+var Notification = require('../models/notifications');
 
 var ifExists = {
 
@@ -60,14 +61,18 @@ var ifExists = {
     }
   },
 
-  // session: async function(username){
-  //   try {
-  //     var result = await Sessions.findOne({'user.username': username}).exec();
-  //     return result;
-  //   } catch(e) {
-  //     return false;
-  //   }
-  // },
+  notification: async function(userid){
+    try {
+      var result = await Notification.findOne({'user': userid}).exec();
+      if(result){
+        return result;
+      }else{
+        return false;
+      }
+    } catch(e) {
+      return false;
+    }
+  },
 }
 
 module.exports = ifExists;
