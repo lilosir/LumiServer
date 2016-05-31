@@ -4,21 +4,15 @@ var fetch = require('node-fetch');
 var headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        "SESSION-TOKEN": "98de7fc6-cc58-a818-1b9d-235cd8d74ca5",
+        "SESSION-TOKEN": "1a3f3e53-8216-dd43-2422-2cad3d64351d",
   }
 
-var body = JSON.stringify({
-  from:"NwRfA",
-  to:"574761f43ce12658159781b3",
-  });
-
 var contents = {
-  method: 'POST', 
+  method: 'GET', 
   headers: headers, 
-  body: body,
 };
 
-fetch('http://localhost:3100/users/addFriendRequest/574761f43ce12658159781b5',contents)
+fetch('http://localhost:3100/notifications/getnotifications/574761f43ce12658159781b3',contents)
   .then(function(res) {
     return res.json();
   })

@@ -102,7 +102,7 @@ module.exports = Ctrl.createController({
       await session.update({ expire_At: new_expire,session_token: GUID() }).exec();
       // console.log("updated session1:",session);
      
-      session = await Sessions.findOne({user:user._id}).populate("user", "username avatar").exec();
+      session = await Sessions.findOne({user:user._id}).populate("user", "username avatar nickname").exec();
 
       // console.log("send session:",session);
       return res.send(session);

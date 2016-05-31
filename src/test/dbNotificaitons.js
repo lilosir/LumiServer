@@ -17,9 +17,9 @@ var Notifications = require('../models/notifications');
 
 
 // clear the database
-Notifications.remove({},function(err, docs) {
-  console.log(docs);
-})
+// Notifications.remove({},function(err, docs) {
+//   console.log(docs);
+// })
 
 //show sessions
 Notifications.find({}, function(err, docs){

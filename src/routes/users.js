@@ -3,8 +3,6 @@ var Users = require('../models/users');
 var router = express.Router();
 var Users = require('../controller/Users')
 
-var data;
-
 // get "/" => get user list
 // get "/:id"  => get user by id
 // get "/" => ?query=fwefwe
