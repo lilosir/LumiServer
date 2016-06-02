@@ -21,12 +21,27 @@ var Notifications = require('../models/notifications');
 //   console.log(docs);
 // })
 
-//show sessions
-Notifications.find({}, function(err, docs){
-	if(err){
-		console.log(err)
-	}else{
-		console.log(docs[0])
-	}
-}).populate('contents')
+//show notifications
+// Notifications.find({}, function(err, docs){
+// 	if(err){
+// 		console.log(err)
+// 	}else{
+// 		// console.log(docs[0].contents);
+// 		console.log(docs[0])
+
+// 	}
+// }).populate('contents.from', 'avatar nickname');
+
+//update one piece notification to read
+// Notifications.findOneAndUpdate({
+// 	user: '574761f43ce12658159781b3', 
+// 	'contents.from': '574761f43ce12658159781b5',
+// 	'contents.classificaiton': 'addFriendRequest',
+// 	'contents.ifread': true},
+// 	{$set: {'contents.$.ifread': false}}, function(err, docs){
+// 	if(err){
+// 		console.log(err)
+// 	}else{
+// 		console.log(docs)
+// 	}});
 

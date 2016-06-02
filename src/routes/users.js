@@ -31,4 +31,6 @@ router.get('/isFriend', Users.isFriend);
 
 router.post('/addFriendRequest/:id', Users.addFriendRequest);
 
+router.post('/addFriend/:id', Users.addFriend);
+
 module.exports = router;

@@ -13,7 +13,7 @@ module.exports = Ctrl.createController({
 
   //the array below contains the registed functions which are need to add extra functions before executing
   findSession: ['getMyself', 'getUserFriends', 'updateRecent', 'getRecent', 'isFriend',
-                'addFriendRequest', ],
+                'addFriendRequest', 'addFriend' ],
 
   registers: async function (req, res, next) {
     console.log(req.body);
@@ -383,6 +383,33 @@ module.exports = Ctrl.createController({
       console.log("illegal user");
       res.send(current_user);
     }
-  }
+  },
+
+  addFriend: async function({params, current_user, body, query}, res, next){
+    var {
+      id,
+    } = body;   
+
+    if (params.id == current_user._id){
+      console.log("!!!")
+      try{
+        var user = await Users.findByIdAndUpdate(params.id,{$push:{'friends':id}}).exec();
+        if(user){
+          var user2 = await Users.findByIdAndUpdate(id,{$push:{'friends':params.id}}).exec();
+
+          if(user2){
+            user = await Users.findById(params.id).exec();
+            res.send(user);
+          }
+        }
+        
+      }catch(e){
+        return res.send({message:'Sorry add friend failed, try agian later', status: 500});
+      }
+    }else{
+      console.log("illegal user");
+      res.send(current_user);
+    }
+  },
 
 });
