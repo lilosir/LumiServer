@@ -17,20 +17,20 @@ var Notifications = require('../models/notifications');
 
 
 // clear the database
-// Notifications.remove({},function(err, docs) {
-//   console.log(docs);
-// })
+Notifications.remove({},function(err, docs) {
+  console.log(docs);
+})
 
 //show notifications
-// Notifications.find({}, function(err, docs){
-// 	if(err){
-// 		console.log(err)
-// 	}else{
-// 		// console.log(docs[0].contents);
-// 		console.log(docs[0])
+Notifications.find({}, function(err, docs){
+	if(err){
+		console.log(err)
+	}else{
+		// console.log(docs[0].contents);
+		console.log(docs[0])
 
-// 	}
-// }).populate('contents.from', 'avatar nickname');
+	}
+}).populate('contents.from', 'avatar nickname');
 
 //update one piece notification to read
 // Notifications.findOneAndUpdate({
