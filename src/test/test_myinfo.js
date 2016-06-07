@@ -1,29 +1,26 @@
-function isInArray(value, array) {
-  return array.indexOf(value) > -1;
-}
+var InitialNews =  [
+			{
+				subject:'This is the 1 post',
+				reply: 20,
+			},
+			{
+				subject:'This is the 2 post',
+				reply: 320,
+			},
+			{
+				subject:'This is the 3 post',
+				reply: 20,
+			},
+			{
+				subject:'This is the 4 post',
+				reply: 320,
+			},
+			{
+				subject:'This is the 5 post',
+				reply: 20,
+			},
+		];
 
-var arr = [
-	{
-		name: 'A',
-		age: 10,
-	},
-	{
-		name: 'B',
-		age: 12,
-	},
-	{
-		name: 'C',
-		age: 8,
-	} 
-];
+		InitialNews.push({});
 
-var str = {name:'A',age:10};
-
-// console.log(arr.indexOf(str));
-for (var i = 0; i < arr.length; i++) {
-	if(str.name == arr[i].name && str.age == arr[i].age){
-		arr[i].age = 0;
-	}
-}
-
-console.log(arr)
+console.log(InitialNews)
