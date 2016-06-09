@@ -21,6 +21,6 @@ var InitialNews =  [
 			},
 		];
 
-		InitialNews.push({});
+var a = InitialNews.splice(2,1);
 
-console.log(InitialNews)
+console.log(a)
