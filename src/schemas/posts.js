@@ -5,12 +5,12 @@ var Schema = mongoose.Schema;
 var Posts = new Schema({
   user: {type: Schema.Types.ObjectId, ref:"Users"},
   category: String,
-  body: [{
+  body: {
   	subject: String,
-  	reply: Number ,
-    like: Number,
+    text: String,
   	image: [{uri: String}],
-  }],
+  },
+  like: Number,
   comments:[{
     by: {type: Schema.Types.ObjectId, ref:"Users"},
     content: String,
