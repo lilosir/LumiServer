@@ -34,7 +34,9 @@ module.exports = Ctrl.createController({
 	  					subject: body.subject,
 	  					text: body.text,
 	  					image: image,
-	  				}});
+	  				}})
+
+          // post = await Posts.findById(post._id).exec();
 
   				return res.send(post);
 
@@ -48,6 +50,35 @@ module.exports = Ctrl.createController({
   	  console.log("illegal user");
       res.send(current_user);
   	}
+  },
+
+  getPosts: async function(req, res, next){
+
+    var {
+      category,
+      direction,
+      date,
+    } = req.query;
+
+    console.log(req.query);
+    var posts = [];
+    try{
+      if(direction == 'older'){
+        posts = await Posts.find({
+          category:'publicPost',
+          created_at: {$lt: date, }}).sort('-created_at').limit(5).populate("user","avatar nickname");;
+      }
+
+      if(direction == 'newer'){
+        posts = await Posts.find({
+          category:'publicPost',
+          created_at: {$gte: date, }}).sort('-created_at').limit(5).populate("user","avatar nickname");;
+      }
+
+      res.send(posts);
+    }catch(e){
+      return next({message: e.message});
+    }
   },
 
 });
