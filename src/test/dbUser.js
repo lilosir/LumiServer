@@ -18,9 +18,9 @@ var Users = require('../models/users');
 //   console.log(docs);
 // })
 
-// Users.find({},function (err,user){
-//   console.log(user);
-// });
+Users.find({},function (err,user){
+  console.log(user);
+});
 
 /**----------------------------------------------------------------------------
 push friends
@@ -79,13 +79,13 @@ var run = co.wrap(function* (){
 //           console.log(docs)
 //         });
 
-Users.findOne({_id: '574761f43ce12658159781b3', friends: '574761f43ce12658159781b5' },
-	function(err, docs){
-        	if(err){
-        		console.log(err);
-        	}
-        	console.log(docs)
-        });
+// Users.findOne({_id: '574761f43ce12658159781b3', friends: '574761f43ce12658159781b5' },
+// 	function(err, docs){
+//         	if(err){
+//         		console.log(err);
+//         	}
+//         	console.log(docs)
+//         });
 
 // Users.update({username: 'rsheng1@lakeheadu.ca'}, 
 //   {$set: {recent: []}}, 

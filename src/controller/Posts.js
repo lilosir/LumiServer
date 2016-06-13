@@ -8,7 +8,7 @@ var Ctrl = require('../Controller');
 module.exports = Ctrl.createController({
 
   //the array below contains the registed functions which are need to add extra functions before executing
-  findSession: ['createPost'],
+  findSession: ['createPost','likeOrDislike'],
 
   createPost: async function({params, current_user, body, query}, res, next){
 
@@ -16,7 +16,7 @@ module.exports = Ctrl.createController({
   	if(params.id == current_user._id){
 
   		//if this is a publi post
-  		if(body.category == "publicPost"){
+  		// if(body.category == "publicPost"){
   			console.log("!!!")
   			try{
   				var image = [];
@@ -44,7 +44,7 @@ module.exports = Ctrl.createController({
   				return next({message: e.message})
   			}
   			
-  		}
+  		// }
 
   	}else{
   	  console.log("illegal user");
@@ -55,29 +55,66 @@ module.exports = Ctrl.createController({
   getPosts: async function(req, res, next){
 
     var {
+      id,
       category,
       direction,
       date,
     } = req.query;
 
-    console.log(req.query);
+    // console.log(req.query);
     var posts = [];
     try{
-      if(direction == 'older'){
-        posts = await Posts.find({
-          category:'publicPost',
-          created_at: {$lt: date, }}).sort('-created_at').limit(5).populate("user","avatar nickname");;
+      
+      if(id){
+        // fetch the specific one
+        posts = await Posts.findById(id).populate("user","avatar nickname").exec();
+      }else{
+        // fetch all the older or newer
+
+        if(direction == 'older'){
+          posts = await Posts.find({
+            category: category,
+            created_at: {$lt: date, }}).sort('-created_at').limit(5).populate("user","avatar nickname");
+        }
+
+        if(direction == 'newer'){
+          posts = await Posts.find({
+            category: category,
+            created_at: {$gt: date, }}).sort('-created_at').limit(5).populate("user","avatar nickname");
+        }
       }
 
-      if(direction == 'newer'){
-        posts = await Posts.find({
-          category:'publicPost',
-          created_at: {$gte: date, }}).sort('-created_at').limit(5).populate("user","avatar nickname");;
-      }
-
-      res.send(posts);
+      return res.send(posts);
     }catch(e){
       return next({message: e.message});
+    }
+  },
+
+  likeOrDislike: async function({params, current_user, body, query}, res, next){
+    if(params.id == current_user._id){
+      var {
+        id,
+        ifLike,
+      } = body;
+
+      var post;
+      try{
+        var post1 = await Posts.findByIdAndUpdate(id,{$pull: {like: params.id}}).exec();
+        var post2 = await Posts.findByIdAndUpdate(id,{$pull: {dislike: params.id}}).exec();
+
+        if(ifLike){
+          post1 = await Posts.findByIdAndUpdate(id,{$push: {like: params.id}}).exec();              
+          return res.status(200).send({message: 'liked it successfully'});
+        }else{
+          post2 = await Posts.findByIdAndUpdate(id,{$push: {dislike: params.id}}).exec();              
+          return res.status(200).send({message: 'disliked it successfully'});
+        }
+      }catch(e){
+        return next({messgae: e.messgae});
+      }
+    }else{
+      console.log("illegal user");
+      res.send(current_user);
     }
   },
 
