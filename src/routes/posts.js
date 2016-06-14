@@ -8,4 +8,6 @@ router.get('/getPosts', Posts.getPosts);
 
 router.post('/likeOrDislike/:id', Posts.likeOrDislike);
 
+router.post('/submitComment/:id', Posts.submitComment);
+
 module.exports = router;

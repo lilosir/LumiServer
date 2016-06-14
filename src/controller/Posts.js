@@ -8,7 +8,7 @@ var Ctrl = require('../Controller');
 module.exports = Ctrl.createController({
 
   //the array below contains the registed functions which are need to add extra functions before executing
-  findSession: ['createPost','likeOrDislike'],
+  findSession: ['createPost','likeOrDislike','submitComment'],
 
   createPost: async function({params, current_user, body, query}, res, next){
 
@@ -67,20 +67,31 @@ module.exports = Ctrl.createController({
       
       if(id){
         // fetch the specific one
-        posts = await Posts.findById(id).populate("user","avatar nickname").exec();
+        posts = await Posts.findById(id)
+        .populate("user","avatar nickname")
+        .populate("comments.by","avatar nickname")
+        .exec();
       }else{
         // fetch all the older or newer
 
         if(direction == 'older'){
           posts = await Posts.find({
             category: category,
-            created_at: {$lt: date, }}).sort('-created_at').limit(5).populate("user","avatar nickname");
+            created_at: {$lt: date, }})
+          .sort('-created_at')
+          .limit(5)
+          .populate("user","avatar nickname")
+          .populate("comments.by","avatar nickname").exec();
         }
 
         if(direction == 'newer'){
           posts = await Posts.find({
             category: category,
-            created_at: {$gt: date, }}).sort('-created_at').limit(5).populate("user","avatar nickname");
+            created_at: {$gt: date, }})
+          .sort('-created_at')
+          .limit(5)
+          .populate("user","avatar nickname")
+          .populate("comments.by","avatar nickname").exec();
         }
       }
 
@@ -111,6 +122,27 @@ module.exports = Ctrl.createController({
         }
       }catch(e){
         return next({messgae: e.messgae});
+      }
+    }else{
+      console.log("illegal user");
+      res.send(current_user);
+    }
+  },
+
+  submitComment: async function({params, current_user, body, query}, res, next){
+    
+    if(params.id == current_user._id){
+      var {
+        postId,
+        comment,
+      } = body;
+
+      try{
+        var result = await Posts.findByIdAndUpdate(postId, {$push: {comments: {by: params.id, content: comment}}}).exec();
+        
+        return res.status(200).send({message: 'comment successfully'});
+      }catch(e){
+        return next({message: e.message})
       }
     }else{
       console.log("illegal user");
