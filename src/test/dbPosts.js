@@ -26,9 +26,9 @@ var Posts = require('../models/posts');
 //   console.log(post);
 // });
 
-// Posts.find({category:"publicPost"},function (err,post){
-//   console.log(post);
-// });
+Posts.find({category:"market"},function (err,post){
+  console.log(post);
+});
 
 // var post = new Posts({
 // 	user:"574761f43ce12658159781b3", 
@@ -96,10 +96,10 @@ var Posts = require('../models/posts');
 // 		}
 // 	});
 
-Posts.findOne({_id: '575ef64f14235f804efe5835'}).exec(function(err, docs){
-		if(err){
-			console.log(err)
-		}else{
-			console.log(docs)
-		}
-	});
+// Posts.findOne({_id: '575ef64f14235f804efe5835'}).exec(function(err, docs){
+// 		if(err){
+// 			console.log(err)
+// 		}else{
+// 			console.log(docs)
+// 		}
+// 	});

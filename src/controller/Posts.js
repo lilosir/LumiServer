@@ -34,6 +34,8 @@ module.exports = Ctrl.createController({
 	  					subject: body.subject,
 	  					text: body.text,
 	  					image: image,
+              current: body.current,
+              original: body.original,
 	  				}})
 
           // post = await Posts.findById(post._id).exec();

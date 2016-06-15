@@ -9,6 +9,8 @@ var Posts = new Schema({
   	subject: String,
     text: String,
   	image: [{uri: String}],
+    current: String,
+    origin: String,
   },
   like:[{type: Schema.Types.ObjectId, ref:"Users",}], 
   dislike: [{type: Schema.Types.ObjectId, ref:"Users"}],
