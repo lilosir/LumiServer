@@ -87,8 +87,8 @@ var run = co.wrap(function* (){
 //         	console.log(docs)
 //         });
 
-// Users.update({username: 'rsheng1@lakeheadu.ca'}, 
-//   {$set: {recent: []}}, 
+// Users.findByIdAndUpdate('574761f43ce12658159781b6', 
+//   {$set: {friends: []}}, 
 //   function(err, res){
 //     console.log(res)
 //   })
