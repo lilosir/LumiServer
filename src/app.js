@@ -25,6 +25,7 @@ var sessions = require('./routes/sessions');
 var messages = require('./routes/messages');
 var notifications = require('./routes/notifications');
 var posts = require('./routes/posts');
+var classes = require('./routes/classes');
 
 
 var app = express();
@@ -50,6 +51,7 @@ app.use('/sessions', sessions);
 app.use('/messages', messages);
 app.use('/notifications', notifications);
 app.use('/posts', posts);
+app.use('/classes',classes);
 
 
 // var pathView = path.join(__dirname, '../views');
