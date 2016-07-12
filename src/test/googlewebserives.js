@@ -10,14 +10,18 @@ var fetch = require('node-fetch');
 // 	.catch(function(err){
 // 	    console.log(err);
 // 	})
-var from = "From: " + "rsheng@lakeheadu.ca";
-var to = "To: "+"Oliver Sheng <sryoliver@gmail.com>";
-var date = new Date() +"";
-var subject = "Subject: "+"hi";
-var content = "hhhh"
+// var from = "From: " + "rsheng@lakeheadu.ca";
+// var to = "To: "+"Oliver Sheng <sryoliver@gmail.com>";
+// var date = new Date() +"";
+// var subject = "Subject: "+"hi";
+// var content = "hhhh"
 
-var result = from + "\n" + to +"\n" + date +"\n" + subject +"\n" + content;
+// var result = from + "\n" + to +"\n" + date +"\n" + subject +"\n" + content;
 
-console.log(result)
+// console.log(result)
 
-var s = [1,2,3,4];
+// var s = [1,2,3,4];
+var a = [];
+a[0] = 1;
+a[2] = 2;
+console.log(a.length)
